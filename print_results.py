@@ -62,5 +62,32 @@ def print_results(results_dic, results_stats_dic, model,
     Returns:
            None - simply printing results.
     """    
-    None
+    print("\n\n*** Results Summary for CNN Model Architecture",model.upper(), 
+          "***")
+    print("{:20}: {:6d}".format('# Images', results_stats_dic['n_images']))
+    print("{:20}: {:6d}".format('# Dog Images', results_stats_dic['n_dogs_img']))
+    print("{:20}: {:6d}".format('# Not-Dog Images', results_stats_dic['n_notdogs_img']))
+    print("{:20}: {:6.2f}".format('% Correct Dogs', results_stats_dic['pct_correct_dogs']))
+    print("{:20}: {:6.2f}".format('% Correct Breed', results_stats_dic['pct_correct_breed']))
+    print("{:20}: {:6.2f}".format('% Correct Not-a Dog', results_stats_dic['pct_correct_notdogs']))
+    # this includes both dogs and not-a dog
+    print("{:20}: {:6.2f}".format('% Match', results_stats_dic['pct_match']))
+
+    if print_incorrect_dogs:
+        if (results_stats_dic["n_correct_dogs"] + results_stats_dic["n_correct_notdogs"]) != results_stats_dic['n_images']:
+            
+            print("\nINCORRECT Dog/NOT Dog Assignments:")
+
+            for results in results_dic.values():
+                if results[3] ^ results[4]:
+                    print("Real: {:>26}   Classifier: {:>30}".format(results[0], results[1]))
+
+
+    if print_incorrect_breed:
+        if results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed']:
+            print("\nINCORRECT Dog Breed Assignment:")
+            for results in results_dic.values():
+                if results[3] == 1 and results[4] == 1 and results[2] == 0:
+                    print("Real: {:>26}   Classifier: {:>30}".format(results[0], results[1]))
+
                 
